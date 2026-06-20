@@ -7,14 +7,48 @@
 
 import { useRef, type ReactNode } from 'react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
-import { Sunrise, ChevronDown, VenetianMask, KeyRound, Hand, ArrowRight } from 'lucide-react'
+import { ChevronDown, VenetianMask, KeyRound, Hand, ArrowRight } from 'lucide-react'
 import { PrimaryButton } from './PrimaryButton'
 import { Disclaimer } from './Disclaimer'
 import { copy } from '../content/copy.en'
-import { PHASE_LABELS } from '../app/steps'
 
 const EASE = [0.22, 0.61, 0.36, 1] as const
 const PROMISE_ICONS = [VenetianMask, KeyRound, Hand]
+
+// Compact labels for the tight six-dot timeline so every column stays even and
+// readable. (The full "Understand" wording still shows in the in-app progress
+// hint, where there's room for it.)
+const TIMELINE_LABELS = ['Enter', 'Affirm', 'Share', 'Learn', 'Act', 'Follow up']
+
+// A clean, hand-tuned sunrise mark — a rising sun on the horizon with soft rays.
+// (Reads more clearly as "a new day" than the stock upload-style glyph.)
+function SunriseMark({ size = 56 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {/* rays */}
+      <line x1="32" y1="13" x2="32" y2="22" />
+      <line x1="17" y1="22" x2="22" y2="27" />
+      <line x1="47" y1="22" x2="42" y2="27" />
+      {/* rising sun */}
+      <path d="M20 43 a12 12 0 0 1 24 0" />
+      {/* horizon */}
+      <line x1="9" y1="43" x2="25" y2="43" />
+      <line x1="39" y1="43" x2="55" y2="43" />
+      {/* foreground line for depth */}
+      <line x1="15" y1="51" x2="49" y2="51" opacity="0.6" />
+    </svg>
+  )
+}
 
 function Eyebrow({ children }: { children: ReactNode }) {
   return (
@@ -98,7 +132,9 @@ export function Landing({ onStart }: { onStart: () => void }) {
             <motion.div style={{ scale: reduce ? 1 : emblemScale }} className="relative mb-9 grid place-items-center">
               <div className="absolute h-44 w-44 rounded-full bg-peach/60 blur-2xl animate-breathe" />
               <div className="relative grid h-32 w-32 place-items-center rounded-full bg-gradient-to-br from-peach to-terracotta/70 shadow-soft-lg animate-breathe">
-                <Sunrise size={54} strokeWidth={1.7} className="text-surface" aria-hidden="true" />
+                <span className="text-surface">
+                  <SunriseMark size={56} />
+                </span>
               </div>
             </motion.div>
 
@@ -181,14 +217,14 @@ export function Landing({ onStart }: { onStart: () => void }) {
 
           <Reveal delay={0.1}>
             <motion.ol
-              className="mt-7 flex items-center justify-between rounded-card border border-line bg-surface/70 p-5 shadow-soft"
+              className="mt-7 flex items-start justify-between rounded-card border border-line bg-surface/70 px-3 py-5 shadow-soft"
               initial="hidden"
               whileInView="show"
               viewport={{ root: scrollRef, amount: 0.6, once: true }}
               transition={{ staggerChildren: 0.12, delayChildren: 0.15 }}
             >
-              {PHASE_LABELS.map((label, i) => (
-                <motion.li key={label} variants={{ hidden: {}, show: {} }} className="flex flex-1 flex-col items-center text-center">
+              {TIMELINE_LABELS.map((label, i) => (
+                <motion.li key={label} variants={{ hidden: {}, show: {} }} className="flex min-w-0 flex-1 flex-col items-center text-center">
                   <span className="relative flex w-full items-center justify-center">
                     {i > 0 && (
                       <motion.span
@@ -205,7 +241,7 @@ export function Landing({ onStart }: { onStart: () => void }) {
                   </span>
                   <motion.span
                     variants={labelFade}
-                    className="mt-2 font-body text-[10px] font-bold uppercase leading-tight tracking-wide text-ink-soft"
+                    className="mt-2 px-0.5 font-body text-[9px] font-bold uppercase leading-[1.25] tracking-normal text-ink-soft"
                   >
                     {label}
                   </motion.span>
