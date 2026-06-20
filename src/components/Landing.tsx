@@ -309,8 +309,8 @@ export function Landing({ onStart }: { onStart: () => void }) {
         <div className="footer-fade-wash absolute inset-0 bg-bg" aria-hidden="true" />
         <div className="pointer-events-auto relative px-screen pb-7 pt-12">
           <PrimaryButton onClick={onStart}>{copy.welcome.cta}</PrimaryButton>
-          <Disclaimer variant="privacy">
-            <span className="mt-2 inline-block">{copy.welcome.finePrint}</span>
+          <Disclaimer variant="privacy" className="mt-3">
+            {copy.welcome.finePrint}
           </Disclaimer>
         </div>
       </div>
