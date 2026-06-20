@@ -8,6 +8,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useJourney } from './app/useJourney'
 import type { StepId } from './app/steps'
 import { PhoneFrame } from './components/PhoneFrame'
+import { CustomCursor } from './components/CustomCursor'
 
 // Screens (added incrementally; missing ones fall back to a calm placeholder).
 import { Welcome } from './screens/01_Welcome'
@@ -55,23 +56,26 @@ export function App() {
   }
 
   return (
-    <PhoneFrame>
-      <div className="relative h-full w-full overflow-hidden">
-        <AnimatePresence mode="wait" custom={direction} initial={false}>
-          <motion.div
-            key={step}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ type: 'spring', stiffness: 120, damping: 20, opacity: { duration: 0.25 } }}
-            className="absolute inset-0"
-          >
-            <Screen />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </PhoneFrame>
+    <>
+      <PhoneFrame>
+        <div className="relative h-full w-full overflow-hidden">
+          <AnimatePresence mode="wait" custom={direction} initial={false}>
+            <motion.div
+              key={step}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ type: 'spring', stiffness: 120, damping: 20, opacity: { duration: 0.25 } }}
+              className="absolute inset-0"
+            >
+              <Screen />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </PhoneFrame>
+      <CustomCursor />
+    </>
   )
 }
