@@ -20,10 +20,10 @@ export function BlurredMotivationBg() {
 
   // The slow focus-pull: start soft + slightly zoomed, settle to a calm blur.
   const focusPull = reduce
-    ? { initial: false as const, animate: { filter: 'blur(16px)', scale: 1.06, opacity: 1 } }
+    ? { initial: false as const, animate: { filter: 'blur(10px)', scale: 1.05, opacity: 1 } }
     : {
-        initial: { filter: 'blur(30px)', scale: 1.14, opacity: 0 },
-        animate: { filter: 'blur(16px)', scale: 1.06, opacity: 1 },
+        initial: { filter: 'blur(20px)', scale: 1.12, opacity: 0 },
+        animate: { filter: 'blur(10px)', scale: 1.05, opacity: 1 },
         transition: { duration: 1.6, ease: EASE },
       }
 

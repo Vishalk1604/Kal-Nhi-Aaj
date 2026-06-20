@@ -56,16 +56,20 @@ export function startListening(handlers: SpeechHandlers, lang = 'en-IN'): Speech
   recognition.interimResults = true
 
   recognition.onresult = (e) => {
-    let interim = ''
-    let final = ''
-    for (let i = e.resultIndex; i < e.results.length; i++) {
+    // Rebuild the ENTIRE transcript from the full results list every event, so
+    // each emission is the complete recognized text (idempotent). Reading from
+    // resultIndex + appending caused duplicates ("i ii i feel feel") because
+    // growing interim partials and re-fired finals piled up.
+    let finalText = ''
+    let interimText = ''
+    for (let i = 0; i < e.results.length; i++) {
       const result = e.results[i]
       const text = result[0]?.transcript ?? ''
-      if (result.isFinal) final += text
-      else interim += text
+      if (result.isFinal) finalText += text
+      else interimText += text
     }
-    if (final) handlers.onTranscript(final, true)
-    else if (interim) handlers.onTranscript(interim, false)
+    const combined = `${finalText} ${interimText}`.replace(/\s+/g, ' ').trim()
+    if (combined) handlers.onTranscript(combined, interimText === '')
   }
   recognition.onerror = (e) => handlers.onError?.(e.error)
   recognition.onend = () => handlers.onEnd?.()

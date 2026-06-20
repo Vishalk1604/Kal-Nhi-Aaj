@@ -30,11 +30,12 @@ export function Concern() {
   const [listening, setListening] = useState(false)
   const voiceSupported = isSpeechSupported()
 
-  function handleTranscript(text: string, isFinal: boolean) {
+  function handleTranscript(text: string) {
+    // `text` is the COMPLETE transcript for this session; `base` is whatever was
+    // in the field before listening began. Always replace (never append) so words
+    // don't duplicate as interim results grow.
     const base = baseTextRef.current
-    const merged = base ? `${base} ${text}`.trim() : text
-    patch({ concern: { text: merged } })
-    if (isFinal) baseTextRef.current = merged
+    patch({ concern: { text: base ? `${base} ${text}`.trim() : text } })
   }
 
   function handleListeningChange(isListening: boolean) {
