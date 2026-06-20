@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Kal Nahi, Aaj — design tokens ("safe room at dawn")
+   CSS variables mirror tailwind.config so non-utility CSS can reach them too.
+--------------------------------------------------------------------------- */
+:root {
+  --bg: #fbf6f0;
+  --surface: #fffdfb;
+  --peach-soft: #f7dfcb;
+  --terracotta: #e0795a;
+  --terracotta-d: #b9512f;
+  --sage: #8fa98a;
+  --sage-d: #5e7a59;
+  --ink: #2b2420;
+  --ink-soft: #7a6f68;
+  --urgent: #c73e1d;
+  --line: rgba(43, 36, 32, 0.1);
+
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: '"Nunito Sans"', system-ui, sans-serif;
+  font-family: 'Nunito Sans', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply font-body text-body text-ink;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+  button {
+    font-family: inherit;
+  }
+  /* Keyboard focus rings — warm, visible, never harsh */
+  :focus-visible {
+    outline: 3px solid var(--terracotta);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+/* The phone canvas paints a warm linen field behind the device frame */
+.app-canvas {
+  background:
+    radial-gradient(120% 80% at 50% -10%, #fdeede 0%, rgba(253, 238, 222, 0) 55%),
+    var(--bg);
+}
+
+/* Thin, unobtrusive scrollbars inside the phone */
+.scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(43, 36, 32, 0.15) transparent;
+}
+.scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(43, 36, 32, 0.15);
+  border-radius: 999px;
+}
+
+/* Sticky-footer dissolve: content should melt softly into the CTA region, not
+   hit a hard line. Two masked layers stacked over the bottom of the scroll area:
+   a backdrop blur that fades out upward, and a solid screen-bg wash (any bg
+   colour, applied via the element's own background) masked to dissolve upward. */
+.footer-fade-blur {
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 88%);
+  mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 88%);
+}
+.footer-fade-wash {
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 44%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, #000 44%, transparent 100%);
+}
+
+/* Respect users who ask for less motion — keep instant fades, drop slides */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
